@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Чамд нэг асуулт байна</title>
+<meta property="og:title" content="Чамд нэг асуулт байна">
+<meta property="og:description" content="Нээгээд хариулаарай">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F8FC; --card:#FFFFFF; --ink:#17304F; --soft:#5E7290;
+  --blue:#2E7BC4; --blue-soft:#D6E7F7; --amber:#F2A93B; --amber-ink:#3B2405;
+  --foam:#FFFBEF; --line:#D9E3EE; --pretzel:#B5651D;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1E33; --card:#18304F; --ink:#EEF4FB; --soft:#A7B8CE;
+    --blue:#6EA8E0; --blue-soft:#1F3E63; --line:#2A4A70; --pretzel:#E0954F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1E33; --card:#18304F; --ink:#EEF4FB; --soft:#A7B8CE;
+  --blue:#6EA8E0; --blue-soft:#1F3E63; --line:#2A4A70; --pretzel:#E0954F;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  display:flex; align-items:center; justify-content:center;
+  padding:1rem; overflow:hidden; -webkit-tap-highlight-color:transparent;
+}
+/* bavarian diamond bands */
+.band{position:fixed;left:0;right:0;height:22px;pointer-events:none;
+  background-color:var(--card);
+  background-image:linear-gradient(45deg,var(--blue) 25%,transparent 25%,transparent 75%,var(--blue) 75%),
+                   linear-gradient(45deg,var(--blue) 25%,transparent 25%,transparent 75%,var(--blue) 75%);
+  background-size:22px 22px;background-position:0 0,11px 11px;opacity:.9}
+.band.top{top:env(safe-area-inset-top,0px)}
+.band.bot{bottom:env(safe-area-inset-bottom,0px)}
+
+.stage{width:100%;max-width:420px;position:relative;z-index:1}
+.screen{display:none;text-align:center;animation:pop .35s ease-out}
+.screen.on{display:block}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+.mug{width:120px;height:auto;display:block;margin:0 auto .4rem}
+.mug .foam{animation:wobble 2.4s ease-in-out infinite;transform-origin:60px 40px}
+@keyframes wobble{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
+
+h1{
+  font-family:"Rubik","Nunito",system-ui,sans-serif;
+  font-weight:700; font-size:clamp(1.55rem,6vw,1.95rem);
+  line-height:1.22; margin:.25rem 0 .4rem; letter-spacing:-.01em;
+}
+.sub{color:var(--soft);font-size:1.05rem;margin:0 0 1.6rem}
+
+.btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;min-height:56px}
+button{
+  font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;border:0;
+  border-radius:14px;padding:.85rem 1.6rem;transition:transform .15s,background .15s;
+}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+button:active{transform:scale(.96)}
+.yes{background:var(--amber);color:var(--amber-ink);box-shadow:0 4px 0 #C9821C}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+#no{transition:left .18s ease-out,top .18s ease-out}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;text-align:left}
+.choice{
+  background:var(--card);color:var(--ink);border-radius:16px;padding:1rem .9rem;
+  border:2px solid var(--line);font-weight:700;font-size:.98rem;line-height:1.3;
+  display:flex;flex-direction:column;gap:.35rem;align-items:flex-start;
+}
+.choice .ic{font-size:1.6rem}
+.choice:hover{border-color:var(--amber)}
+.times{grid-template-columns:repeat(3,1fr);text-align:center}
+.times .choice{align-items:center;padding:1.1rem .4rem}
+.times .h{font-family:"Rubik",sans-serif;font-size:1.6rem;font-weight:700;color:var(--blue)}
+.date-pill{display:inline-block;background:var(--blue-soft);color:var(--ink);font-weight:800;
+  border-radius:999px;padding:.35rem .9rem;margin:0 0 1.2rem}
+
+/* event pass */
+.pass{background:var(--card);border-radius:20px;text-align:left;margin:1rem 0 1.4rem;
+  position:relative;overflow:hidden;border:2px solid var(--line)}
+.pass-top{position:relative;padding:1rem 1.2rem .9rem;background:var(--blue);color:#fff}
+.pass-top b{font-family:"Rubik",sans-serif;font-size:1.3rem;display:block}
+.pass-top span{font-size:.88rem;opacity:.9}
+.pass-top .badge{position:absolute;right:1rem;top:50%;transform:translateY(-50%);font-size:2rem}
+.tear{position:relative;border-top:2px dashed var(--line);margin:0 0 .9rem}
+.tear::before,.tear::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--line)}
+.tear::before{left:-14px}.tear::after{right:-14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1rem;padding:1rem 1.2rem}
+.f small{display:block;color:var(--soft);font-size:.8rem}
+.f strong{font-size:1.02rem}
+.f.wide{grid-column:1/-1}
+.pay{color:var(--pretzel)}
+.budget{padding:0 1.2rem 1.1rem}
+.budget small{display:block;color:var(--soft);font-size:.8rem;margin-bottom:.35rem}
+.budget .r{display:flex;justify-content:space-between;font-size:.95rem;padding:.15rem 0}
+.budget .r.total{border-top:1px solid var(--line);margin-top:.35rem;padding-top:.45rem;font-weight:800;color:var(--pretzel)}
+
+.done{display:none;margin-top:1rem;font-weight:800;color:var(--blue);font-size:1.1rem}
+.fly{position:fixed;font-size:1.6rem;pointer-events:none;z-index:5;animation:fly 1.8s ease-out forwards}
+@keyframes fly{to{transform:translateY(-70vh) rotate(25deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="band top" aria-hidden="true"></div>
+<div class="band bot" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <section class="screen on" id="s1">
+    <svg class="mug" viewBox="0 0 120 120" aria-hidden="true">
+      <ellipse cx="56" cy="112" rx="38" ry="5" fill="#17304F" opacity=".08"/>
+      <path d="M92 50h8a12 12 0 0 1 12 12v18a12 12 0 0 1-12 12h-8" fill="none" stroke="#E7C27A" stroke-width="7"/>
+      <rect x="20" y="40" width="72" height="68" rx="12" fill="#F2A93B" stroke="#C9821C" stroke-width="2.5"/>
+      <rect x="30" y="52" width="6" height="44" rx="3" fill="#FFF" opacity=".35"/>
+      <g class="foam">
+        <path d="M16 46c-4-12 8-20 16-15 2-10 18-12 22-3 6-8 22-6 22 6 10-2 18 8 12 16z" fill="#FFFBEF" stroke="#E9DFC7" stroke-width="2.5"/>
+      </g>
+      <ellipse cx="45" cy="72" rx="4.5" ry="5.5" fill="#3B2405"/>
+      <ellipse cx="67" cy="72" rx="4.5" ry="5.5" fill="#3B2405"/>
+      <circle cx="46.5" cy="70" r="1.5" fill="#fff"/><circle cx="68.5" cy="70" r="1.5" fill="#fff"/>
+      <ellipse cx="36" cy="82" rx="6" ry="3.5" fill="#E8735A" opacity=".55"/>
+      <ellipse cx="76" cy="82" rx="6" ry="3.5" fill="#E8735A" opacity=".55"/>
+      <path d="M50 82q6 7 12 0" fill="none" stroke="#3B2405" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <h1>Хамтдаа Октоберфест явах уу?</h1>
+    <p class="sub">шар айраг, хиам, хөгжим, бас би</p>
+    <div class="btns">
+      <button class="yes" id="yes1">Тэгье</button>
+      <button class="ghost" id="no">Амжихгүй</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s2">
+    <h1>Үнэхээр үү?</h1>
+    <p class="sub">Дараа нь буцаахгүй шүү</p>
+    <div class="btns">
+      <button class="yes" data-go="s3">Тийм</button>
+      <button class="yes" data-go="s3">Мэдээж</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s3">
+    <h1>Юу уух вэ?</h1>
+    <p class="sub">Нэгийг нь сонго</p>
+    <div class="choices" id="drinks">
+      <button class="choice" data-v="Цайвар шар айраг"><span class="ic">🍺</span>Цайвар шар айраг</button>
+      <button class="choice" data-v="Хар шар айраг"><span class="ic">🍻</span>Хар шар айраг</button>
+      <button class="choice" data-v="Улаан буудайн шар айраг"><span class="ic">🌾</span>Улаан буудайн шар айраг</button>
+      <button class="choice" data-v="Согтууруулах ундаагүй"><span class="ic">🧃</span>Согтууруулах ундаагүй</button>
+    </div>
+  </section>
+
+  <section class="screen" id="s4">
+    <h1>Сайн сонголт! Хэдэн цагт уулзах вэ?</h1>
+    <span class="date-pill">10 сарын 7, Лхагва</span>
+    <div class="choices times" id="times">
+      <button class="choice" data-v="19:00"><span class="h">19:00</span></button>
+      <button class="choice" data-v="20:00"><span class="h">20:00</span></button>
+      <button class="choice" data-v="21:00"><span class="h">21:00</span></button>
+    </div>
+  </section>
+
+  <section class="screen" id="s5">
+    <h1>Тэгвэл Salm Pub-д уулзъя!</h1>
+    <div class="pass">
+      <div class="pass-top"><b>Октоберфест</b><span>2 хүний урилга</span><span class="badge" aria-hidden="true">🥨</span></div>
+      <div class="fields">
+        <div class="f"><small>Өдөр</small><strong>10 сарын 7, Лхагва</strong></div>
+        <div class="f"><small>Цаг</small><strong id="tTime">–</strong></div>
+        <div class="f"><small>Газар</small><strong>Salm Pub</strong></div>
+        <div class="f"><small>Ундаа</small><strong id="tDrink">–</strong></div>
+        <div class="f wide"><small>Төлбөр</small><strong class="pay">Өөрийгөө даана</strong></div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="ghost" data-go="s4">Өөр цаг сонгох</button>
+      <button class="yes" id="ok">За!</button>
+    </div>
+    <p class="done" id="done">Тэгвэл Лхагва гаригт уулзъя 🍻</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var state = {drink:null};
+  var no = document.getElementById('no');
+  function go(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
+    document.getElementById(id).classList.add('on');
+    if(id !== 's1'){ no.style.display = 'none'; }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ go(b.dataset.go); });
+  });
+
+  var yes1 = document.getElementById('yes1');
+  var tries = 0;
+  var lines = ['Амжихгүй','Итгэлтэй юу?','Дахиад бод','Болохгүй ээ','Өөрөө мэдэж байгаа','😢'];
+  function dodge(e){
+    if(e){ e.preventDefault(); }
+    tries++;
+    var w = no.offsetWidth, h = no.offsetHeight;
+    var maxX = window.innerWidth - w - 16, maxY = window.innerHeight - h - 40;
+    no.style.position = 'fixed';
+    no.style.zIndex = 4;
+    no.style.left = Math.max(16, Math.random()*maxX) + 'px';
+    no.style.top = Math.max(40, Math.random()*maxY) + 'px';
+    no.textContent = lines[Math.min(tries, lines.length-1)];
+    yes1.style.transform = 'scale(' + Math.min(1 + tries*0.08, 1.5) + ')';
+  }
+  no.addEventListener('mouseenter', dodge);
+  no.addEventListener('touchstart', dodge, {passive:false});
+  no.addEventListener('click', dodge);
+  yes1.addEventListener('click', function(){ go('s2'); });
+
+  document.querySelectorAll('#drinks .choice').forEach(function(b){
+    b.addEventListener('click', function(){ state.drink = b.dataset.v; go('s4'); });
+  });
+  document.querySelectorAll('#times .choice').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.getElementById('tTime').textContent = b.dataset.v;
+      document.getElementById('tDrink').textContent = state.drink || 'Хамтдаа шийднэ';
+      go('s5');
+    });
+  });
+
+  document.getElementById('ok').addEventListener('click', function(){
+    document.getElementById('done').style.display = 'block';
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var icons = ['🍺','🥨','❤️','🎶','🍻'];
+    for(var i=0;i<18;i++){
+      (function(i){
+        setTimeout(function(){
+          var el = document.createElement('div');
+          el.className = 'fly';
+          el.textContent = icons[i % icons.length];
+          el.style.left = (Math.random()*90 + 5) + 'vw';
+          el.style.top = (75 + Math.random()*15) + 'vh';
+          document.body.appendChild(el);
+          setTimeout(function(){ el.remove(); }, 1900);
+        }, i*70);
+      })(i);
+    }
+  });
+})();
+</script>
+</body>
+</html>
