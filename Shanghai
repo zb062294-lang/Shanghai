@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Чамд нэг асуулт байна</title>
+<meta property="og:title" content="Чамд нэг асуулт байна">
+<meta property="og:description" content="Нээгээд хариулаарай">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBEDEA; --card:#FFFFFF; --ink:#1E2A4A; --soft:#6B7390;
+  --red:#C8322F; --red-ink:#FFFFFF; --jade:#1F6F64; --gold:#E9B24A;
+  --line:#F0D6D1; --dough:#FFF6EC; --dough-edge:#E8CDB4;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1A2140; --card:#252E52; --ink:#F6EEE9; --soft:#AEB4CC;
+    --red:#E2524E; --jade:#5FB8A8; --gold:#F0C366; --line:#3A4470;
+    --dough:#FFF3E6; --dough-edge:#D9BBA0;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1A2140; --card:#252E52; --ink:#F6EEE9; --soft:#AEB4CC;
+  --red:#E2524E; --jade:#5FB8A8; --gold:#F0C366; --line:#3A4470;
+  --dough:#FFF3E6; --dough-edge:#D9BBA0;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  display:flex; align-items:center; justify-content:center;
+  padding:1rem; overflow:hidden; -webkit-tap-highlight-color:transparent;
+}
+/* lantern string across the top */
+.lanterns{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:70px;pointer-events:none}
+.lanterns svg{width:100%;height:100%}
+
+.stage{width:100%;max-width:420px;position:relative;z-index:1}
+.screen{display:none;text-align:center;animation:pop .35s ease-out}
+.screen.on{display:block}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+
+.bun{width:132px;height:auto;display:block;margin:0 auto .5rem}
+.bun.bounce{animation:bounce .9s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+h1{
+  font-family:"Comfortaa","Nunito",system-ui,sans-serif;
+  font-weight:700; font-size:clamp(1.55rem,6vw,1.95rem);
+  line-height:1.25; margin:.25rem 0 .4rem; letter-spacing:-.01em;
+}
+.sub{color:var(--soft);font-size:1.05rem;margin:0 0 1.6rem}
+
+.btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;min-height:56px}
+button{
+  font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;border:0;
+  border-radius:999px;padding:.85rem 1.6rem;transition:transform .15s,background .15s;
+}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+button:active{transform:scale(.96)}
+.yes{background:var(--red);color:var(--red-ink);box-shadow:0 4px 0 color-mix(in srgb,var(--red) 60%,#000)}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+#no{transition:left .18s ease-out,top .18s ease-out}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;text-align:left}
+.choice{
+  background:var(--card);color:var(--ink);border-radius:18px;padding:1rem .9rem;
+  border:2px solid var(--line);font-weight:700;font-size:.98rem;line-height:1.3;
+  display:flex;flex-direction:column;gap:.35rem;align-items:flex-start;
+}
+.choice .ic{font-size:1.6rem}
+.choice:hover{border-color:var(--red)}
+.dates{grid-template-columns:repeat(3,1fr);text-align:center}
+.dates .choice{align-items:center;padding:1rem .4rem}
+.dates .d{font-family:"Comfortaa",sans-serif;font-size:1.9rem;font-weight:700;color:var(--red)}
+.dates .m{font-size:.85rem;color:var(--soft)}
+
+/* boarding pass */
+.pass{
+  background:var(--card);border-radius:22px;text-align:left;margin:1rem 0 1.4rem;
+  position:relative;overflow:hidden;border:2px solid var(--line);
+}
+.pass-top{background:var(--jade);color:#fff;padding:.9rem 1.2rem;display:flex;justify-content:space-between;align-items:center}
+.pass-top b{font-family:"Comfortaa",sans-serif;font-size:1.05rem}
+.pass-top span{font-size:.85rem;opacity:.85}
+.route{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.2rem .4rem}
+.city .code{font-family:"Comfortaa",sans-serif;font-weight:700;font-size:2.1rem;line-height:1}
+.city .name{color:var(--soft);font-size:.85rem;margin-top:.25rem}
+.city:last-child{text-align:right}
+.plane{flex:1;display:flex;align-items:center;gap:.4rem;padding:0 .6rem;color:var(--red)}
+.plane i{flex:1;border-top:2px dashed var(--line)}
+.tear{position:relative;border-top:2px dashed var(--line);margin:.9rem 0}
+.tear::before,.tear::after{
+  content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;
+  background:var(--paper);border:2px solid var(--line);
+}
+.tear::before{left:-14px}.tear::after{right:-14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1rem;padding:0 1.2rem 1.2rem}
+.f small{display:block;color:var(--soft);font-size:.8rem}
+.f strong{font-size:1.02rem}
+.f.wide{grid-column:1/-1}
+.pay strong{color:var(--red)}
+
+.done{display:none;margin-top:1rem;font-weight:800;color:var(--jade);font-size:1.1rem}
+.heart{position:fixed;font-size:1.6rem;pointer-events:none;z-index:5;animation:fly 1.8s ease-out forwards}
+@keyframes fly{to{transform:translateY(-70vh) rotate(25deg);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="lanterns" aria-hidden="true">
+  <svg viewBox="0 0 400 70" preserveAspectRatio="none">
+    <path d="M0 8 Q100 30 200 10 T400 8" fill="none" stroke="var(--soft)" stroke-width="1" opacity=".5"/>
+  </svg>
+</div>
+
+<main class="stage">
+
+  <!-- 1. Асуулт -->
+  <section class="screen on" id="s1">
+    <svg class="bun" viewBox="0 0 140 120" aria-hidden="true">
+      <ellipse cx="70" cy="108" rx="44" ry="6" fill="var(--ink)" opacity=".08"/>
+      <path d="M18 82c0-30 22-52 52-56 30 4 52 26 52 56 0 14-14 22-52 22S18 96 18 82z" fill="var(--dough)" stroke="var(--dough-edge)" stroke-width="2.5"/>
+      <path d="M70 26c-4 8-12 12-20 16M70 26c4 8 12 12 20 16M70 26c-2 10-4 16-10 22M70 26c2 10 4 16 10 22" fill="none" stroke="var(--dough-edge)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="70" cy="24" r="5" fill="var(--dough)" stroke="var(--dough-edge)" stroke-width="2.5"/>
+      <ellipse cx="54" cy="74" rx="4.5" ry="5.5" fill="#1E2A4A"/>
+      <ellipse cx="86" cy="74" rx="4.5" ry="5.5" fill="#1E2A4A"/>
+      <circle cx="55.5" cy="72" r="1.5" fill="#fff"/><circle cx="87.5" cy="72" r="1.5" fill="#fff"/>
+      <ellipse cx="44" cy="84" rx="7" ry="4" fill="#F3A1A0" opacity=".8"/>
+      <ellipse cx="96" cy="84" rx="7" ry="4" fill="#F3A1A0" opacity=".8"/>
+      <path d="M63 84q7 7 14 0" fill="none" stroke="#1E2A4A" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <h1>Надтай хамт Шанхай аялалд явах уу?</h1>
+    <p class="sub">онгоц, хоол, гэрэлтэй шөнө, бас би</p>
+    <div class="btns">
+      <button class="yes" id="yes1">Тэгье</button>
+      <button class="ghost" id="no">Амжихгүй</button>
+    </div>
+  </section>
+
+  <!-- 2. Баталгаажуулалт -->
+  <section class="screen" id="s2">
+    <h1>Үнэхээр үү?</h1>
+    <p class="sub">Дараа нь буцаахгүй шүү</p>
+    <div class="btns">
+      <button class="yes" data-go="s3">Тийм</button>
+      <button class="yes" data-go="s3">Мэдээж</button>
+    </div>
+  </section>
+
+  <!-- 3. Төлөвлөгөө -->
+  <section class="screen" id="s3">
+    <h1>Шанхайд хамгийн түрүүнд юу хийх вэ?</h1>
+    <p class="sub">Нэгийг нь сонго</p>
+    <div class="choices" id="plans">
+      <button class="choice" data-v="Бунд дээр шөнийн гэрэл харах"><span class="ic">🌃</span>Бунд дээр шөнийн гэрэл харах</button>
+      <button class="choice" data-v="Сяолунбао идэх"><span class="ic">🥟</span>Сяолунбао идэх</button>
+      <button class="choice" data-v="Юй цэцэрлэгээр зугаалах"><span class="ic">🏮</span>Юй цэцэрлэгээр зугаалах</button>
+      <button class="choice" data-v="Хуанпу голоор завиар явах"><span class="ic">⛴️</span>Хуанпу голоор завиар явах</button>
+    </div>
+  </section>
+
+  <!-- 4. Өдөр -->
+  <section class="screen" id="s4">
+    <h1>Сайн сонголт! Хэзээ явах вэ?</h1>
+    <p class="sub">2026 оны 10 сар</p>
+    <div class="choices dates" id="dates">
+      <button class="choice" data-v="10 сарын 9, Баасан"><span class="d">9</span><span class="m">Баасан</span></button>
+      <button class="choice" data-v="10 сарын 10, Бямба"><span class="d">10</span><span class="m">Бямба</span></button>
+      <button class="choice" data-v="10 сарын 11, Ням"><span class="d">11</span><span class="m">Ням</span></button>
+    </div>
+  </section>
+
+  <!-- 5. Онгоцны билет -->
+  <section class="screen" id="s5">
+    <h1>Тэгвэл уулзъя!</h1>
+    <div class="pass">
+      <div class="pass-top"><b>Хамтдаа Airlines</b><span>2 зорчигч</span></div>
+      <div class="route">
+        <div class="city"><div class="code">UBN</div><div class="name">Улаанбаатар</div></div>
+        <div class="plane" aria-hidden="true"><i></i>✈<i></i></div>
+        <div class="city"><div class="code">PVG</div><div class="name">Шанхай</div></div>
+      </div>
+      <div class="tear"></div>
+      <div class="fields">
+        <div class="f"><small>Өдөр</small><strong id="tDate">–</strong></div>
+        <div class="f"><small>Суудал</small><strong id="tSeat">–</strong></div>
+        <div class="f wide"><small>Эхний төлөвлөгөө</small><strong id="tPlan">–</strong></div>
+        <div class="f pay"><small>Төлбөр</small><strong>Бидний хуримтлалаас</strong></div>
+        <div class="f"><small>Ачаа</small><strong>Инээд хязгааргүй</strong></div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="ghost" data-go="s4">Өөр өдөр сонгох</button>
+      <button class="yes" id="ok">За!</button>
+    </div>
+    <p class="done" id="done">Тэгвэл бэлдэж эхэлье ✈️</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var state = {plan:null, date:null};
+  function go(id){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
+    document.getElementById(id).classList.add('on');
+    if(id !== 's1'){ no.style.display = 'none'; }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ go(b.dataset.go); });
+  });
+
+  // зугтдаг "Амжихгүй" товч
+  var no = document.getElementById('no');
+  var yes1 = document.getElementById('yes1');
+  var tries = 0;
+  var lines = ['Амжихгүй','Итгэлтэй юу?','Дахиад бод','Болохгүй ээ','Өөрөө мэдэж байгаа','😢'];
+  function dodge(e){
+    if(e){ e.preventDefault(); }
+    tries++;
+    var w = no.offsetWidth, h = no.offsetHeight;
+    var maxX = window.innerWidth - w - 16, maxY = window.innerHeight - h - 16;
+    no.style.position = 'fixed';
+    no.style.zIndex = 4;
+    no.style.left = Math.max(16, Math.random()*maxX) + 'px';
+    no.style.top = Math.max(16, Math.random()*maxY) + 'px';
+    no.textContent = lines[Math.min(tries, lines.length-1)];
+    var s = Math.min(1 + tries*0.08, 1.5);
+    yes1.style.transform = 'scale(' + s + ')';
+  }
+  no.addEventListener('mouseenter', dodge);
+  no.addEventListener('touchstart', dodge, {passive:false});
+  no.addEventListener('click', dodge);
+  yes1.addEventListener('click', function(){ go('s2'); });
+
+  // сонголтууд
+  document.querySelectorAll('#plans .choice').forEach(function(b){
+    b.addEventListener('click', function(){ state.plan = b.dataset.v; go('s4'); });
+  });
+  document.querySelectorAll('#dates .choice').forEach(function(b){
+    b.addEventListener('click', function(){
+      state.date = b.dataset.v;
+      document.getElementById('tDate').textContent = state.date;
+      document.getElementById('tPlan').textContent = state.plan || 'Хамтдаа шийднэ';
+      var row = 8 + Math.floor(Math.random()*20);
+      document.getElementById('tSeat').textContent = row + 'A, ' + row + 'B';
+      go('s5');
+    });
+  });
+
+  // "За!"
+  document.getElementById('ok').addEventListener('click', function(){
+    document.getElementById('done').style.display = 'block';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce) return;
+    var icons = ['❤️','🏮','✈️','🥟','💕'];
+    for(var i=0;i<18;i++){
+      (function(i){
+        setTimeout(function(){
+          var h = document.createElement('div');
+          h.className = 'heart';
+          h.textContent = icons[i % icons.length];
+          h.style.left = (Math.random()*90 + 5) + 'vw';
+          h.style.top = (75 + Math.random()*20) + 'vh';
+          document.body.appendChild(h);
+          setTimeout(function(){ h.remove(); }, 1900);
+        }, i*70);
+      })(i);
+    }
+  });
+
+  // дэнлүүнүүд
+  var svg = document.querySelector('.lanterns svg');
+  [60,140,260,340].forEach(function(x,i){
+    var y = i%2 ? 22 : 16;
+    svg.insertAdjacentHTML('beforeend',
+      '<line x1="'+x+'" y1="'+(y-8)+'" x2="'+x+'" y2="'+y+'" stroke="var(--soft)" stroke-width="1" opacity=".5"/>'+
+      '<ellipse cx="'+x+'" cy="'+(y+12)+'" rx="11" ry="13" fill="var(--red)"/>'+
+      '<rect x="'+(x-6)+'" y="'+(y-1)+'" width="12" height="3" fill="var(--gold)"/>'+
+      '<rect x="'+(x-6)+'" y="'+(y+24)+'" width="12" height="3" fill="var(--gold)"/>');
+  });
+})();
+</script>
+</body>
+</html>
